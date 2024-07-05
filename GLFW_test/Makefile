@@ -5,7 +5,7 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++11
 
 # Define the sources and headers
-SRCS = main.cpp
+SRCS = main.cpp glad.c
 
 # Define the object files
 OBJS = main.o
