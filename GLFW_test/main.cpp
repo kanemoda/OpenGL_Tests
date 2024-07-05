@@ -1,45 +1,57 @@
+#include "glad.h"
 #include <GLFW/glfw3.h>
+#include <iostream>
+#include <math.h>
 
 int main(void)
 {
-    GLFWwindow* window;
+    glfwInit();
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE , GLFW_OPENGL_CORE_PROFILE);
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window)
+    GLFWwindow *window = glfwCreateWindow(800 , 800 , "I Made This" , NULL , NULL);
+    if (window == NULL)
     {
+        std::cout << "Failed to create window" << std::endl;
         glfwTerminate();
         return -1;
     }
 
-    /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    /* Loop until the user closes the window */
+    gladLoadGL();
+    glViewport(0,0,800,800);
+
+    
+    
+    glClearColor(1.0f , 0.37f , 0.07f , 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    
+    float prev_time = float(glfwGetTime());
+    float angle = 0.0f;
+
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
+        float time = float(glfwGetTime());
+        if (time - prev_time >= 0.1f)
+        {
+            angle += 0.1f;
+            prev_time = time;
+        }
+        glClearColor(float(sin(angle)) , float(cos(angle)) , float(tan(angle)), 1.0f);
+
         glClear(GL_COLOR_BUFFER_BIT);
-
-        glBegin(GL_TRIANGLES);
-
-        glVertex2f(-0.5f , -0.5f);
-        glVertex2f(0.0f , 0.5f);
-        glVertex2f(0.5f , -0.5f);
-
-        glEnd();
-
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
-
-        /* Poll for and process events */
+        glfwSwapBuffers(window);     
+        
         glfwPollEvents();
     }
+    
 
+
+    glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
 }
